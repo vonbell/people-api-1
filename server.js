@@ -70,7 +70,7 @@ app.put('/people/:id', async (req, res) => {
             { 
                 new: true 
             }
-        ))
+        ));
     } catch (error) {
         res.status(400).json(error);
     }
@@ -78,6 +78,14 @@ app.put('/people/:id', async (req, res) => {
 
 
 // delete
+app.delete('/people/:id', async (req, res) => {
+    try {
+        res.json(await People.findByIdAndDelete(req.params.id));
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
 
 // tell the app to listen
 app.listen(PORT, () => {
