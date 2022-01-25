@@ -24,6 +24,15 @@ db
 .on('disconnected', () => console.log('Disconnected from MongoDB'))
 .on('error', (err) => console.log('MongoDB Error: ' + err.message))
 
+// set up people model
+const peopleSchema = new mongoose.Schema({
+    name: String,
+    image: String,
+    title: String
+}, { timestamps: true });
+
+const People = mongoose.model('People', peopleSchema);
+
 // mount middleware
 app.use(express.json()); // this creates req.body using incoming JSON from our requests
 app.use(morgan('dev'));
@@ -32,6 +41,24 @@ app.use(cors());
 // routes
 app.get('/', (req, res) => {
     res.send('welcome to the people api');
+});
+
+// index route
+app.get('/people', async (req, res) => {
+    try {
+        res.json(await People.find({}));
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
+// create route
+app.post('/people', async (req, res) => {
+    try {
+        res.json(await People.create(req.body));
+    } catch (error) {
+        res.status(400).json(error);
+    }
 });
 
 // tell the app to listen
