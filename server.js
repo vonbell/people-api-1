@@ -61,6 +61,24 @@ app.post('/people', async (req, res) => {
     }
 });
 
+// update
+app.put('/people/:id', async (req, res) => {
+    try {
+        res.json(await People.findByIdAndUpdate(
+            req.params.id, 
+            req.body, 
+            { 
+                new: true 
+            }
+        ))
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
+
+// delete
+
 // tell the app to listen
 app.listen(PORT, () => {
     console.log(`Express is listening on port:${PORT}`);
